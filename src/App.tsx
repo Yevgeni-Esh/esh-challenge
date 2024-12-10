@@ -65,6 +65,7 @@ const App: React.FC = () => {
   }, [searchTerm]);
 
   useEffect(() => {
+    console.log('dsfsdf')
     let filtered = people;
     if (filter.hair_color) {
       filtered = filtered.filter(
@@ -80,7 +81,7 @@ const App: React.FC = () => {
       filtered = filtered.filter((person) => person.gender === filter.gender);
     }
     setFilteredPeople(filtered);
-  }, [filter, people]);
+  }, []);
 
   return (
     <Container>
