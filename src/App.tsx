@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 const Container = styled.div`
   padding: 20px;
@@ -12,6 +12,7 @@ const SearchBar = styled.input`
     margin-bottom: 20px;
     font-size: 16px;
     box-sizing: border-box;
+    background: white;
 `;
 
 const Content = styled.div`
@@ -34,10 +35,12 @@ const FilterItem = styled.div`
 `;
 
 interface Person {
+  id: number;
   name: string;
+  status: string;
+  species: string;
+  type: string;
   gender: string;
-  hair_color: string;
-  eye_color: string;
 }
 
 const App: React.FC = () => {
@@ -45,15 +48,15 @@ const App: React.FC = () => {
   const [people, setPeople] = useState<Person[]>([]);
   const [filteredPeople, setFilteredPeople] = useState<Person[]>([]);
   const [filter, setFilter] = useState({
-    hair_color: '',
-    eye_color: '',
+    species: '',
+    status: '',
     gender: '',
   });
 
   useEffect(() => {
     if (searchTerm.length > 0) {
       axios
-        .get(`https://swapi.dev/api/people/?search=${searchTerm}`)
+        .get(`https://rickandmortyapi.com/api/character/?name=${searchTerm}`)
         .then((response) => {
           setPeople(response.data.results);
           setFilteredPeople(response.data.results);
@@ -65,16 +68,15 @@ const App: React.FC = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    console.log('dsfsdf')
     let filtered = people;
-    if (filter.hair_color) {
+    if (filter.species) {
       filtered = filtered.filter(
-        (person) => person.hair_color === filter.hair_color
+        (person) => person.species === filter.species
       );
     }
-    if (filter.eye_color) {
+    if (filter.status) {
       filtered = filtered.filter(
-        (person) => person.eye_color === filter.eye_color
+        (person) => person.status === filter.status
       );
     }
     if (filter.gender) {
@@ -95,33 +97,29 @@ const App: React.FC = () => {
         <Filters>
           <h3>Filters</h3>
           <FilterItem>
-            <label>Hair Color: </label>
+            <label>Species: </label>
             <select
-              value={filter.hair_color}
+              value={filter.species}
               onChange={(e) =>
-                setFilter((prev) => ({ ...prev, hair_color: e.target.value }))
+                setFilter((prev) => ({ ...prev, species: e.target.value }))
               }
             >
               <option value="">All</option>
-              <option value="blond">Blond</option>
-              <option value="brown">Brown</option>
-              <option value="black">Black</option>
-              <option value="n/a">N/A</option>
+              <option value="Human">Human</option>
             </select>
           </FilterItem>
           <FilterItem>
-            <label>Eye Color: </label>
+            <label>Status: </label>
             <select
-              value={filter.eye_color}
+              value={filter.status}
               onChange={(e) =>
-                setFilter((prev) => ({ ...prev, eye_color: e.target.value }))
+                setFilter((prev) => ({ ...prev, status: e.target.value }))
               }
             >
               <option value="">All</option>
-              <option value="blue">Blue</option>
-              <option value="brown">Brown</option>
-              <option value="yellow">Yellow</option>
-              <option value="red">Red</option>
+              <option value="Human">Human</option>
+              <option value="Dead">Dead</option>
+              <option value="Unknown">Unknown</option>
             </select>
           </FilterItem>
           <FilterItem>
@@ -133,9 +131,10 @@ const App: React.FC = () => {
               }
             >
               <option value="">All</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="n/a">N/A</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Genderless">Genderless</option>
+              <option value="Unknown">Unknown</option>
             </select>
           </FilterItem>
         </Filters>
@@ -146,8 +145,8 @@ const App: React.FC = () => {
               <div key={index}>
                 <h4>{person.name}</h4>
                 <p>Gender: {person.gender}</p>
-                <p>Hair Color: {person.hair_color}</p>
-                <p>Eye Color: {person.eye_color}</p>
+                <p>Species: {person.species}</p>
+                <p>Status: {person.status}</p>
                 <hr />
               </div>
             ))
