@@ -151,7 +151,7 @@ const App: React.FC = () => {
                 <p>Gender: {person.gender}</p>
                 <p>Species: {person.species}</p>
                 <p>Status: {person.status}</p>
-                <p>Created: {yearsAgo(person.created)}</p>
+                {/* <p>Created: {yearsAgo(person.created)}</p> */}
                 <hr />
               </div>
             ))
