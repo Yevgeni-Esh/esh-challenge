@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { yearsAgo } from './utils';
 
 const Container = styled.div`
   padding: 20px;
@@ -41,31 +42,34 @@ interface Person {
   species: string;
   type: string;
   gender: string;
+  created: string;
 }
 
-const App: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+const useFetchPeople = (searchTerm: string) => {
   const [people, setPeople] = useState<Person[]>([]);
-  const [filteredPeople, setFilteredPeople] = useState<Person[]>([]);
-  const [filter, setFilter] = useState({
-    species: '',
-    status: '',
-    gender: '',
-  });
-
   useEffect(() => {
     if (searchTerm.length > 0) {
       axios
         .get(`https://rickandmortyapi.com/api/character/?name=${searchTerm}`)
         .then((response) => {
           setPeople(response.data.results);
-          setFilteredPeople(response.data.results);
         });
     } else {
       setPeople([]);
-      setFilteredPeople([]);
     }
   }, [searchTerm]);
+  return people;
+};
+
+const App: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const people = useFetchPeople(searchTerm);
+  const [filteredPeople, setFilteredPeople] = useState<Person[]>(people);
+  const [filter, setFilter] = useState({
+    species: '',
+    status: '',
+    gender: '',
+  });
 
   useEffect(() => {
     let filtered = people;
@@ -83,7 +87,7 @@ const App: React.FC = () => {
       filtered = filtered.filter((person) => person.gender === filter.gender);
     }
     setFilteredPeople(filtered);
-  }, []);
+  }, [people]);
 
   return (
     <Container>
@@ -147,6 +151,7 @@ const App: React.FC = () => {
                 <p>Gender: {person.gender}</p>
                 <p>Species: {person.species}</p>
                 <p>Status: {person.status}</p>
+                <p>Created: {yearsAgo(person.created)}</p>
                 <hr />
               </div>
             ))
