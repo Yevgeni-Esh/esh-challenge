@@ -8,11 +8,12 @@ const Container = styled.div`
 
 const SearchBar = styled.input`
   width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    font-size: 16px;
-    box-sizing: border-box;
-    background: white;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: white;
+  color: black;
 `;
 
 const Content = styled.div`
@@ -61,26 +62,22 @@ const useFetchPeople = (searchTerm: string) => {
 };
 
 const App: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const people = useFetchPeople(searchTerm);
   const [filteredPeople, setFilteredPeople] = useState<Person[]>(people);
   const [filter, setFilter] = useState({
-    species: '',
-    status: '',
-    gender: '',
+    species: "",
+    status: "",
+    gender: "",
   });
 
   useEffect(() => {
     let filtered = people;
     if (filter.species) {
-      filtered = filtered.filter(
-        (person) => person.species === filter.species
-      );
+      filtered = filtered.filter((person) => person.species === filter.species);
     }
     if (filter.status) {
-      filtered = filtered.filter(
-        (person) => person.status === filter.status
-      );
+      filtered = filtered.filter((person) => person.status === filter.status);
     }
     if (filter.gender) {
       filtered = filtered.filter((person) => person.gender === filter.gender);
