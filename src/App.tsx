@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { yearsAgo } from './utils';
 
 const Container = styled.div`
   padding: 20px;
@@ -109,6 +108,7 @@ const App: React.FC = () => {
               }
             >
               <option value="">All</option>
+              <option value="Alien">Alien</option>
               <option value="Human">Human</option>
             </select>
           </FilterItem>
@@ -121,7 +121,7 @@ const App: React.FC = () => {
               }
             >
               <option value="">All</option>
-              <option value="Human">Human</option>
+              <option value="Alive">Alive</option>
               <option value="Dead">Dead</option>
               <option value="Unknown">Unknown</option>
             </select>
